@@ -4,6 +4,7 @@ import pa._
 import org.joda.time.{ DateTime, DateMidnight }
 import model._
 import views.MatchStatus
+import System.currentTimeMillis
 
 
 trait Football extends Collections {
@@ -32,6 +33,11 @@ trait Football extends Collections {
 
   implicit class Match2isOn(m: FootballMatch) {
     def isOn(date: DateMidnight) = m.date.isAfter(date) && m.date.isBefore(date.plusDays(1))
+  }
+
+  implicit class Match2SecondsToStart(m: FootballMatch) {
+    // obviously you cannot 'val' this
+    def secondsToStart = (m.date.getMillis / 1000) - currentTimeMillis / 1000
   }
 
   implicit class Match2status(m: FootballMatch) {
