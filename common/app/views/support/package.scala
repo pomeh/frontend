@@ -60,10 +60,6 @@ sealed trait Container {
   val tone: String
 }
 
-case class MastheadContainer(val showMore: Boolean = false) extends Container {
-  val containerType = "masthead"
-  val tone = "news"
-}
 case class NewsContainer(val showMore: Boolean = true) extends Container {
   val containerType = "news"
   val tone = "news"
