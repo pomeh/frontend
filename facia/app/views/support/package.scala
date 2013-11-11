@@ -8,14 +8,14 @@ object FindStyle {
    * Mapping of collection 'type' to Style - in general, this should suffice
    */
   val generalStyles: Map[String, Container] = Map(
-    "news-stories" -> NewsContainer(),
-    "comment-stories" -> CommentContainer(),
-    "feature-stories" -> FeaturesContainer(),
-    "section-news-stories" -> SectionContainer(),
-    "section-comment-stories" -> SectionContainer(tone = "comment"),
-    "section-feature-stories" -> SectionContainer(tone = "feature"),
-    "regular-stories" -> SectionContainer(),
-    "special-story" -> NewsContainer()
+    ("news-stories", NewsContainer()),
+    ("comment-stories", CommentContainer()),
+    ("feature-stories", FeaturesContainer()),
+    ("section-news-stories", SectionContainer()),
+    ("section-comment-stories", SectionContainer(tone = "comment")),
+    ("section-feature-stories", SectionContainer(tone = "feature")),
+    ("regular-stories", SectionContainer()),
+    ("special-story", NewsContainer())
   )
 
   /**
