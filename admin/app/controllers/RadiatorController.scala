@@ -3,7 +3,7 @@ package controllers.admin
 import play.api.mvc.Controller
 import common.Logging
 import controllers.AuthLogging
-import tools.CloudWatch
+import tools.{PagesPerSessionGraph, CloudWatch}
 import play.api.libs.ws.WS
 import com.ning.http.client.Realm
 import play.api.libs.concurrent.Execution.Implicits._
@@ -55,6 +55,9 @@ object RadiatorController extends Controller with Logging with AuthLogging {
   def liveStats() = Authenticated { implicit request =>
     val responsive = CloudWatch.liveStats("viewsOverSessions.responsive")
     val desktop = CloudWatch.liveStats("viewsOverSessions.desktop")
-    NoCache(Ok(views.html.liveStats(responsive, desktop, Configuration.environment.stage)))
+
+    val comparison = new PagesPerSessionGraph("Pageviews per session", responsive.metricResults, desktop.metricResults)
+
+    NoCache(Ok(views.html.liveStats(responsive, desktop, comparison, Configuration.environment.stage)))
   }
 }

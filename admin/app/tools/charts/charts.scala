@@ -292,3 +292,41 @@ case class FastlyHitMissGraph(
     })
   }
 }
+
+case class PagesPerSessionGraph(
+                               name: String,
+                               responsive: Future[GetMetricStatisticsResult],
+                               desktop: Future[GetMetricStatisticsResult]) extends Chart {
+
+  override lazy val labels = Seq("'Time'", "'responsive'", "'desktop'", "'success'", "'stretch'")
+  override lazy val yAxis = None
+  override val dataset = Nil
+  override def asDataset = s"[[$labelString], $dataString]"
+
+  private def labelString = labels.mkString(",")
+  private def dataString =  datapoints.keys.toList.sorted map { key:Long =>
+    val points = datapoints(key)
+    val data = points.flatMap(_.values) mkString(",")
+    s"['${points.head.name}', $data]"
+  } mkString(",")
+
+  private lazy val datapoints = {
+    val responsiveMap:LongMap[Datapoint] = LongMap(responsive.get().getDatapoints.map {
+      point => (point.getTimestamp.getTime, point)
+    }.toSeq:_*)
+
+    val desktopMap:LongMap[Datapoint] = LongMap(desktop.get().getDatapoints.map {
+      point => (point.getTimestamp.getTime, point)
+    }.toSeq:_*)
+
+    // Merge both queries into a single Map, indexed by timestamp.
+    responsiveMap.intersectionWith(desktopMap, (_, valueA:Datapoint, valueB:Datapoint) => {
+      Seq(
+        new DataPoint(valueA.getTimestamp, Seq[Double](valueA.getAverage)),
+        new DataPoint(valueB.getTimestamp, Seq[Double](valueB.getAverage)),
+        new DataPoint(valueB.getTimestamp, Seq[Double](1.8)),
+        new DataPoint(valueB.getTimestamp, Seq[Double](2.0))
+      )
+    })
+  }
+}

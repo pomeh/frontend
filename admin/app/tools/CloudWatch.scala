@@ -124,7 +124,7 @@ object CloudWatch {
   
   def liveStats(statistic: String) = new LiveStatsGraph(
     cloudClient.getMetricStatisticsAsync(new GetMetricStatisticsRequest()
-      .withStartTime(new DateTime().minusHours(6).toDate)
+      .withStartTime(new DateTime().minusHours(2).toDate)
       .withEndTime(new DateTime().toDate)
       .withPeriod(120)
       .withStatistics("Average")
