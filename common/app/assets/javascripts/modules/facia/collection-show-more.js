@@ -16,25 +16,25 @@ define([
                         default: 4,
                         news: 5,
                         comment: 5,
-                        features: 3
+                        feature: 3
                     },
                     desktop: {
                         default: 4,
                         news: 5,
                         comment: 5,
-                        features: 3
+                        feature: 3
                     },
                     tablet: {
                         default: 3,
                         news: 6,
                         comment: 4,
-                        features: 4
+                        feature: 4
                     },
                     mobile: {
                         default: 2,
                         news: 5,
                         comment: 3,
-                        features: 3,
+                        feature: 3,
                         popular: 5
                     }
                 }[detect.getBreakpoint()];
