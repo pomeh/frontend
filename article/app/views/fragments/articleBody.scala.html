@@ -1,7 +1,7 @@
 @(model: ArticlePage)(implicit request: RequestHeader)
 @import conf.Switches._
 
-@defining((model.article, model.storyPackage)) { case (article, storyPackage) =>
+@defining((model.article, model.storyPackageCollection)) { case (article, storyPackageCollection) =>
     <h2 class="article-zone left-col-deport tone-@VisualTone(article) tone-accent-border">
         <span class="left-col-deport__body">
             <a class="tone-colour" data-link-name="article section" href="@LinkTo{/@article.section}">@Html(article.sectionName.toLowerCase)</a>
@@ -95,8 +95,8 @@
                             <div class="u-table__row">
                                 <div class="u-table__cell u-table__cell--collapse u-table__cell--bottom">
                                     <div class="js-sticky-lower" data-id="mpu-ad-slot"></div>
-                                    @if(storyPackage.nonEmpty) {
-                                        @fragments.cards.card(storyPackage.head, "right", "More on this story", "Story package card", "visible")
+                                    @if(storyPackageCollection.items.nonEmpty) {
+                                        @fragments.cards.card(storyPackageCollection.items.head, "right", "More on this story", "Story package card", "visible")
                                     }
                                 </div>
                             </div>
@@ -111,14 +111,21 @@
             @if(DiscussionSwitch.isSwitchedOn && article.isCommentable) {
                 @fragments.discussion(article.isClosedForComments, article.shortUrlId)
             }
-            @if(storyPackage.nonEmpty) {
-                <aside role="complementary" class="more-on-this-story@if(storyPackage.size == 1){ more-on-this-story--one-item}" data-link-context="@article.section">
-                    @fragments.relatedTrails(storyPackage, heading = "More on this story", visibleTrails = 5)
-                </aside>
-            } else {
-                <aside class="js-related" role="complementary" data-link-context="related@article.url"></aside>
-            }
+        </div>
 
+
+    </div>
+
+    @if(storyPackageCollection.items.nonEmpty) {
+        <div class="facia-container monocolumn-wrapper monocolumn-wrapper--no-limit
+            @if(NewsContainerSwitch.isSwitchedOn){ news-container--v2 } else { news-container--v1 } ">
+            @fragments.containers.news(Config("more-on-this-story", None, Some("More on this story")), model.storyPackageCollection, NewsContainer(showMore = true), containerIndex = 0)
+        </div>
+    }
+
+
+    <div class="article-wrapper monocolumn-wrapper tone-@VisualTone(article)">
+        <div class="article__inner">
             @fragments.mostPopularPlaceholder(article.section)
         </div>
     </div>

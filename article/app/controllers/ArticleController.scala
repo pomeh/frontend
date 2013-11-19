@@ -13,10 +13,10 @@ import scala.collection.JavaConversions._
 
 trait ArticleWithStoryPackage {
   def article: Article
-  def storyPackage: List[Trail]
+  def storyPackageCollection: Collection
 }
-case class ArticlePage(article: Article, storyPackage: List[Trail]) extends ArticleWithStoryPackage
-case class LiveBlogPage(article: LiveBlog, storyPackage: List[Trail]) extends ArticleWithStoryPackage
+case class ArticlePage(article: Article, storyPackageCollection: Collection) extends ArticleWithStoryPackage
+case class LiveBlogPage(article: LiveBlog, storyPackageCollection: Collection) extends ArticleWithStoryPackage
 
 object ArticleController extends Controller with Logging with ExecutionContexts {
 
@@ -65,8 +65,8 @@ object ArticleController extends Controller with Logging with ExecutionContexts 
 
       val supportedContent = response.content.filter { c => c.isArticle || c.isLiveBlog || c.isSudoku }
       val content = supportedContent map { Content(_) } map {
-        case liveBlog: LiveBlog => LiveBlogPage(liveBlog, storyPackage.filterNot(_.id == liveBlog.id))
-        case article: Article => ArticlePage(article, storyPackage.filterNot(_.id == article.id))
+        case liveBlog: LiveBlog => LiveBlogPage(liveBlog, Collection(storyPackage.filterNot(_.id == liveBlog.id)))
+        case article: Article => ArticlePage(article, Collection(storyPackage.filterNot(_.id == article.id)))
       }
 
       ModelOrResult(content, response)
