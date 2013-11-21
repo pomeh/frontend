@@ -214,7 +214,10 @@ Comments.prototype.commentsLoaded = function(resp) {
         this.removeShowMoreButton();
     }
 
-    this.renderReplyButtons(qwery(this.getClass('comment'), bonzo(comments).parent()));
+    if (this.user && this.user.privateFields.canPostComment) {
+        this.renderReplyButtons(qwery(this.getClass('comment'), bonzo(comments).parent()));
+        this.on('click', this.getClass('commentReply'), this.replyToComment);
+    }
     bonzo(this.getElem('comments')).append(comments);
 
     showMoreButton.innerHTML = 'Show more';
