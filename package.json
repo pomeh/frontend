@@ -2,9 +2,8 @@
   "name": "frontend",
   "version": "0.1.0",
   "devDependencies": {
-    "grunt-casperjs": "~1.4.0",
-    "grunt-contrib-imagemin": "~0.4.0",
-    "phantomjs": "~1.9.2-4"
+    "grunt-casperjs": "git://github.com/guardian/grunt-casperjs.git#upgrade",
+    "grunt-contrib-imagemin": "git://github.com/guardian/grunt-contrib-imagemin#master"
   },
   "scripts": {
     "postinstall": "grunt hookmeup"
